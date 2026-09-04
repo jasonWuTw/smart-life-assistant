@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 智慧雲端小助理・完整安裝與設定指南</title>
+  <style>
+    :root {
+      --primary: #2563EB;
+      --primary-dark: #1D4ED8;
+      --primary-light: #EFF6FF;
+      --accent: #10B981;
+      --warning: #F59E0B;
+      --danger: #EF4444;
+      --text: #1E293B;
+      --text-muted: #64748B;
+      --bg: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --border: #E2E8F0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans TC", sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 24px 16px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #1E40AF 0%, #3B82F6 100%);
+      color: white;
+      border-radius: 20px;
+      margin-bottom: 32px;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.25);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      font-size: 1.05rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      backdrop-filter: blur(4px);
+    }
+
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      background: var(--card-bg);
+      padding: 20px 24px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .timeline-step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .timeline-step.active {
+      color: var(--primary);
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .sub-step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 1px 7px;
+      border-radius: 6px;
+      margin-right: 6px;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+    }
+
+    .step-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 28px 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .step-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .step-badge {
+      background: var(--primary);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    .step-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    ol,
+    ul {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 12px;
+      color: #334155;
+    }
+
+    strong {
+      color: #0F172A;
+    }
+
+    .alert {
+      padding: 14px 18px;
+      border-radius: 10px;
+      margin: 16px 0;
+      font-size: 0.95rem;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .alert-info {
+      background-color: #EFF6FF;
+      border-left: 4px solid var(--primary);
+      color: #1E40AF;
+    }
+
+    .alert-warning {
+      background-color: #FFFBEB;
+      border-left: 4px solid var(--warning);
+      color: #92400E;
+    }
+
+    .alert-success {
+      background-color: #ECFDF5;
+      border-left: 4px solid var(--accent);
+      color: #065F46;
+    }
+
+    .code-block {
+      background: #0F172A;
+      color: #E2E8F0;
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+      margin: 8px 0;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-green {
+      background: var(--accent);
+    }
+
+    .btn-green:hover {
+      background: #059669;
+    }
+
+    .faq-item {
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 20px;
+      background: #FAFAFA;
+    }
+
+    .faq-q {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+      font-size: 1.05rem;
+    }
+
+    .faq-a {
+      color: #475569;
+      font-size: 0.95rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px 16px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 640px) {
+      .step-card {
+        padding: 20px 18px;
+      }
+
+      .step-title {
+        font-size: 1.15rem;
+      }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px 10px;
+        padding: 16px 14px;
+        margin-bottom: 24px;
+      }
+
+      .timeline-step {
+        font-size: 0.85rem;
+        gap: 8px;
+      }
+
+      .step-num {
+        width: 24px;
+        height: 24px;
+        font-size: 0.78rem;
+        flex-shrink: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <!-- 頂部標題區 -->
+    <header>
+      <div class="badge-pill">✨ 零技術門檻・免寫程式碼</div>
+      <h1>AI 智慧雲端小助理・完整安裝手冊</h1>
+      <p>隨手記帳、拍發票/收據自動記帳到Google試算表、拍名片自動建Google聯絡人、拍行程/活動自動進Google日曆！</p>
+    </header>
+
+    <!-- 步驟進度列 -->
+    <div class="timeline">
+      <div class="timeline-step active"><span class="step-num">1</span> 建立副本</div>
+      <div class="timeline-step"><span class="step-num">2</span> 領取 API Key</div>
+      <div class="timeline-step"><span class="step-num">3</span> 快速填入 Key</div>
+      <div class="timeline-step"><span class="step-num">4</span> 授權檢測</div>
+      <div class="timeline-step"><span class="step-num">5</span> 正式發布</div>
+      <div class="timeline-step"><span class="step-num">6</span> 加入桌面</div>
+    </div>
+
+    <!-- 準備工作 -->
+    <div class="step-card" style="border-left: 5px solid var(--primary);">
+      <h3 style="margin-bottom: 10px; font-size: 1.2rem;">🛠️ 開始前的準備</h3>
+      <p>您只需要準備：</p>
+      <ul>
+        <li>一個正常的 <strong>Google 帳號</strong>（Gmail 帳號）。</li>
+        <li>一部<strong>電腦</strong>（建議使用 Google Chrome 瀏覽器操作設定，約 3～5 分鐘）。</li>
+        <li><strong>永久免費</strong>：不需綁定信用卡、不需租用任何主機或伺服器。</li>
+      </ul>
+    </div>
+
+    <!-- 步驟 1 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-badge">步驟 1</span>
+        <h2 class="step-title">一鍵「建立副本」獲取個人專屬試算表與程式碼</h2>
+      </div>
+      <ol>
+        <li>點擊作者分享的專屬<strong>AI小助理範本連結</strong>（<a target="_blank"
+            href="https://docs.google.com/spreadsheets/d/1hG0wYjo5KbXUNLHiLie7yPVvlE_jGdVjzHnysy5ZIjo/copy">點我前往範本</a>）。
+        </li>
+        <li>網頁開啟後，畫面中央會跳出對話框：<strong>「您要建立「AI小助理(範本)」的複本嗎？」</strong>。</li>
+        <li>請直接點擊按鈕：<strong>「建立副本」</strong>。</li>
+      </ol>
+      <div class="alert alert-success">
+        <div>🎉 <strong>自動打包完成！</strong> Google 會將包含 5 大專屬分頁（聯絡人、記帳本、行事曆、生活雜事、好物分享）、精緻彩色表頭以及後端全套 AI 程式碼，<strong>100%
+            複製到您的雲端硬碟</strong>中！您完全不用手動建立任何欄位。</div>
+      </div>
+      <div style="margin: 20px 0; text-align: center;">
+        <img src="images/sheet.png" alt="步驟 1 建立副本結果截圖"
+          style="max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); border: 1px solid var(--border);">
+        <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊「建立副本」後產生的個人 Google 試算表畫面（已內建 5
+          大分頁與彩色表頭樣式）</p>
+      </div>
+    </div>
+
+    <!-- 步驟 2 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-badge">步驟 2</span>
+        <h2 class="step-title">免費領取 Google Gemini API 金鑰（API Key）</h2>
+      </div>
+      <p>AI 的辨識大腦來自 Google 官方的 Gemini 模型，每個人都可以免費領取專屬金鑰：</p>
+      <ol>
+        <li>打開瀏覽器，前往 <a href="https://aistudio.google.com/app/apikey" target="_blank" class="btn btn-green">🔗 前往 Google
+            AI Studio 官網</a>。</li>
+        <li>登入您的 Google 帳號，並勾選同意條款。</li>
+        <li>點擊畫面右上角的按鈕：<strong>「Create API key」</strong>（建立 API 金鑰）。
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/createAPI_Key.png" alt="Google AI Studio 建立 API Key 按鈕"
+              style="max-width: 220px; width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊「Create API key」按鈕</p>
+          </div>
+        </li>
+        <li>在彈出的視窗中點擊右下角的 <strong>「Create key」</strong>（建立金鑰）按鈕。
+          <div style="margin: 16px 0; text-align: center;">
+            <img src="images/createKey.png" alt="Google AI Studio 建立金鑰截圖"
+              style="max-width: 480px; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 彈出「Create a new
+              key」視窗後，點擊右下角紅框處的「Create key」</p>
+          </div>
+        </li>
+        <li>金鑰產生後，點擊彈窗右下角的 <strong>「Copy key」</strong>（複製金鑰）按鈕。
+          <div style="margin: 16px 0; text-align: center;">
+            <img src="images/copy_key.png" alt="Google AI Studio 複製金鑰截圖"
+              style="max-width: 480px; width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊右下角紅框處的「Copy key」按鈕複製金鑰</p>
+          </div>
+        </li>
+      </ol>
+      <div class="alert alert-info">
+        <div>💡 <strong>小提醒</strong>：金鑰可能是以 <code>A...</code> 開頭的一長串文字。Google
+          提供個人帳號非常充足的每日免費額度，生活記帳與日程管理完全足夠，不會被扣款！</div>
+      </div>
+    </div>
+
+    <!-- 步驟 3 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-badge">步驟 3</span>
+        <h2 class="step-title">一鍵快速填入 Gemini API Key（免複製試算表網址）</h2>
+      </div>
+      <div class="alert alert-success" style="margin-bottom: 20px;">
+        <div>✨ <strong>全自動升級</strong>：本系統已全面自動化偵測試算表綁定，您<strong>完全不需要手動複製試算表網址</strong>，只需貼上 API Key 一次即可！</div>
+      </div>
+      <h3 style="margin-bottom: 12px; font-size: 1.1rem; color: var(--primary);">🌟 推薦方式：直接在試算表功能表一鍵填入（最簡單）</h3>
+      <ol>
+        <li>回到您在【步驟 1】建立好的 Google 試算表分頁。</li>
+        <li>點擊頂部功能表：👉 <strong>【🤖 AI 智慧小助理】</strong> ➜ <strong>【⚙️ 快速填入 Gemini API Key】</strong>。
+          <div class="alert alert-info" style="margin: 10px 0;">
+            <div>💡 <strong>小提醒</strong>：剛建立好副本若尚未看到此選單，請<strong>重新整理網頁（F5 或重新載入）</strong>一次即可出現！</div>
+          </div>
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/快速填入 Gemini API Key.png" alt="點選快速填入 Gemini API Key 截圖"
+              style="max-width: 540px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊頂端功能表「🤖 AI 智慧小助理」➜「⚙️ 快速填入
+              Gemini API Key」</p>
+          </div>
+        </li>
+        <li><strong>首次執行授權</strong>：若是第一次點擊，Google 會彈出安全授權流程：
+          <ul style="margin-top: 10px; list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 16px;">
+              <span class="sub-step-num">3.1</span> 彈出「需要授權」對話框，點擊 <strong>「確定」</strong> ➜ 選擇您的 Google 帳號。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/key需要授權.png" alt="彈出需要授權對話框截圖"
+                  style="max-width: 320px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+                <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 首次執行會彈出「需要授權」視窗，點擊藍色「確定」按鈕
+                </p>
+              </div>
+            </li>
+            <li style="margin-bottom: 16px;">
+              <span class="sub-step-num">3.2</span> 出現「「AI 智慧雲端小助理」要求存取您的 Google 帳戶」畫面，點擊勾選 <strong>「全選」</strong>。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/key_全選.png" alt="點擊勾選全選截圖"
+                  style="max-width: 420px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+                <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 勾選「全選」以授予必要之雲端小助理存取權限</p>
+              </div>
+            </li>
+            <li style="margin-bottom: 16px;">
+              <span class="sub-step-num">3.3</span> 捲動到畫面最底部，點擊 <strong>「繼續」</strong> 按鈕完成授權。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/key_繼繻.png" alt="點擊繼續截圖"
+                  style="max-width: 420px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+                <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 捲動至最底部，點擊「繼續」</p>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li><strong>貼上金鑰並儲存</strong>：授權完成後，畫面上會彈出「設定 Gemini API Key」對話框（若授權後未自動跳出，再次點選選單「快速填入 Gemini API Key」即可）：
+          <p style="margin: 6px 0;">在輸入框中直接貼上在【步驟 2】取得的 <code>AIzaSy...</code> 金鑰，點擊 <strong>「確定」</strong>。</p>
+          <div style="margin: 12px 0; text-align: center;">
+            <img src="images/key設定.png" alt="設定 Gemini API Key 彈窗截圖"
+              style="max-width: 360px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 貼上您的 Gemini API Key，點擊「確定」</p>
+          </div>
+        </li>
+        <li>🎉 <strong>完成綁定！</strong> 畫面跳出「設定成功」提示，系統已自動將 API Key 與目前試算表全自動綁定，完全免去敲打後台代碼！
+          <div style="margin: 12px 0; text-align: center;">
+            <img src="images/設定成功.png" alt="設定成功提示截圖"
+              style="max-width: 380px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 畫面跳出「🎉 設定成功！」提示，代表 API Key 與試算表已自動完成綁定</p>
+          </div>
+        </li>
+      </ol>
+
+      <details
+        style="margin-top: 20px; border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; background: #F8FAFC;">
+        <summary style="font-weight: 600; cursor: pointer; color: var(--text-muted);">🛠️ 備用方式：在 Apps Script
+          專案設定手動新增（點此展開）</summary>
+        <div style="margin-top: 14px;">
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">
+            若您偏好在後台管理，也可以透過此傳統方式填入（系統已自動偵測試算表，因此<strong>僅需填寫 GEMINI_API_KEY，免填 SHEET_URL</strong>）：</p>
+          <ol style="padding-left: 20px;">
+            <li>點擊頂部功能表：<strong>「擴充功能」</strong> ➜ <strong>「Apps Script」</strong>。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/擴充功能.png" alt="點選擴充功能與Apps Script截圖"
+                  style="max-width: 500px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+              </div>
+            </li>
+            <li>點擊左側選單的 ⚙️ <strong>「專案設定」</strong> ➜ 捲動至底部點擊 <strong>「新增指令碼屬性」</strong>。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/專案設定.png" alt="點選專案設定截圖"
+                  style="max-width: 300px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+              </div>
+            </li>
+            <li>屬性名稱填 <code>GEMINI_API_KEY</code>，值貼上步驟 2 複製的金鑰，最後點擊 <strong>「儲存指令碼屬性」</strong> 即可。</li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- 步驟 4 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-badge">步驟 4</span>
+        <h2 class="step-title">執行權限授權與自我檢測（打通日曆與聯絡人）</h2>
+      </div>
+      <p>為了讓 AI 具備自動寫入 Google 日曆與 Google 通訊錄的權限，需要進行一次性安全檢測與授權：</p>
+
+      <h3 style="margin: 16px 0 12px 0; font-size: 1.1rem; color: var(--primary);">🌟 推薦方式：直接在試算表功能表一鍵檢測（最簡單）</h3>
+      <ol>
+        <li>回到 Google 試算表視窗，點擊頂部功能表：👉 <strong>【🤖 AI 智慧小助理】</strong> ➜ <strong>【🚀 執行權限授權與自我檢測】</strong>。
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/執行權限授權與自我檢測.png" alt="點擊執行權限授權與自我檢測截圖"
+              style="max-width: 320px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊功能表「🤖 AI 智慧小助理」➜「🚀
+              執行權限授權與自我檢測」</p>
+          </div>
+        </li>
+        <li><strong>授權確認流程</strong>（若在步驟 3 已完成授權，此步驟會自動略過直接顯示檢測成功）：
+          <ul style="margin-top: 10px; list-style-type: none; padding-left: 0;">
+            <li style="margin-bottom: 16px;">
+              <span class="sub-step-num">2.1</span> 若彈出「需要授權」視窗，點擊藍色 <strong>「確定」</strong> 按鈕 ➜ 選擇您的 Google 帳號。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/key需要授權.png" alt="需要授權視窗截圖"
+                  style="max-width: 320px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+                <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 首次執行會彈出「需要授權」視窗，點擊藍色「確定」按鈕
+                </p>
+              </div>
+              <div class="alert alert-info" style="margin: 10px 0; font-size: 0.88rem;">
+                <div>💡 若畫面跳出「Google 尚未驗證這個應用程式」警告，請點擊左下角 <strong>「進階」</strong> ➜ 最下方 <strong>「前往「AI小助理」（不安全）」</strong>
+                  即可繼續。</div>
+              </div>
+            </li>
+            <li style="margin-bottom: 16px;">
+              <span class="sub-step-num">2.2</span> 出現「「AI 智慧雲端小助理」要求存取您的 Google 帳戶」畫面，點擊勾選 <strong>「全選」</strong>。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/key_全選.png" alt="勾選全選截圖"
+                  style="max-width: 420px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+                <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 勾選「全選」核取方塊以授予必要存取權限</p>
+              </div>
+            </li>
+            <li style="margin-bottom: 16px;">
+              <span class="sub-step-num">2.3</span> 捲動到畫面最底部，點擊 <strong>「繼續」</strong>。
+              <div style="margin: 12px 0; text-align: center;">
+                <img src="images/key_繼繻.png" alt="點擊繼續截圖"
+                  style="max-width: 420px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+                <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 捲動至最底部，點擊「繼續」</p>
+              </div>
+            </li>
+          </ul>
+        </li>
+        <li><strong>檢測成功！</strong> 畫面會彈出「🎉 檢測成功！」提示框，代表日曆與聯絡人雙向授權已 100% 打通：
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/檢測成功.png" alt="檢測成功截圖"
+              style="max-width: 380px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 彈出「🎉
+              檢測成功！」代表系統已就緒，可直接進行下一步「正式發布」</p>
+          </div>
+        </li>
+      </ol>
+
+      <details
+        style="margin-top: 20px; border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; background: #F8FAFC;">
+        <summary style="font-weight: 600; cursor: pointer; color: var(--text-muted);">🛠️ 備用方式：在 Apps Script 編輯器後台執行
+          testAllPermissions（點此展開）</summary>
+        <div style="margin-top: 14px;">
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 10px;">若您偏好在後台查看詳細執行紀錄，亦可透過此方式檢測：</p>
+          <ol style="padding-left: 20px;">
+            <li>點擊「擴充功能」➜「Apps Script」，點擊左側工具列最上方的 <strong>&lt;&gt;「編輯器」</strong>。
+              <div style="margin: 10px 0; text-align: center;">
+                <img src="images/編輯器.png" alt="點選編輯器截圖"
+                  style="max-width: 260px; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border);">
+              </div>
+            </li>
+            <li>頂端函式下拉選單選擇：👉 <strong><code>testAllPermissions</code></strong>，點擊旁邊的 <strong>「執行」</strong>（▶️ 播放圖示）。
+              <div style="margin: 10px 0; text-align: center;">
+                <img src="images/testAllPermissions.png" alt="選擇函式與執行截圖"
+                  style="max-width: 480px; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border);">
+              </div>
+            </li>
+            <li>下方「執行紀錄」輸出「雙向授權已 100% 打通」即代表成功：
+              <div style="margin: 10px 0; text-align: center;">
+                <img src="images/執行紀錄.png" alt="執行紀錄截圖"
+                  style="max-width: 520px; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--border);">
+              </div>
+            </li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <!-- 步驟 5 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-badge">步驟 5</span>
+        <h2 class="step-title">發布上線（網頁應用程式部署）</h2>
+      </div>
+      <p>現在我們要將系統正式發布為專屬網頁，產生讓手機和電腦隨時使用的專屬網址：</p>
+      <ol>
+        <li>回到 Google 試算表，點擊頂端選單：👉 <strong>「擴充功能」</strong> ➜ <strong>「Apps Script」</strong> 開啟後台編輯器（若您已在 Apps Script 編輯器分頁，可直接在該分頁操作）。
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/擴充功能App Script.png" alt="點選擴充功能與Apps Script截圖"
+              style="max-width: 480px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊頂端選單「擴充功能」➜「Apps Script」開啟後台編輯器</p>
+          </div>
+        </li>
+        <li>在編輯器畫面右上角，點擊藍色按鈕：👉 <strong>「部署」</strong> ➜ <strong>「新增部署作業」</strong>。
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/新增部署作業.png" alt="點擊新增部署作業截圖"
+              style="max-width: 500px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊右上角藍色按鈕「部署」➜「新增部署作業」</p>
+          </div>
+        </li>
+        <li>點擊左上角的齒輪圖示 ⚙️ <strong>「選取類型」</strong> ➜ 選擇 <strong>「網頁應用程式」</strong>。
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/網頁應用程式.png" alt="選取類型網頁應用程式截圖"
+              style="max-width: 360px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊齒輪圖示「選取類型」➜ 選擇「網頁應用程式」</p>
+          </div>
+        </li>
+        <li>依照下列紅框設定填寫，最後點擊右下角的藍色 <strong>「部署」</strong> 按鈕：
+          <ul style="margin: 8px 0 12px 0;">
+            <li><strong>新增說明</strong>：輸入 <code>v1.0 正式上線</code></li>
+            <li><strong>執行身分</strong>：選擇 <strong>「我 (您的帳號)」</strong>（⚠️ 請勿選存取者，確保系統有權限操作您的雲端）。</li>
+            <li><strong>誰可以存取</strong>：選擇 <strong>「所有人」</strong>（方便手機開啟免反覆登入）。</li>
+          </ul>
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/部署.png" alt="填寫部署設定與點擊部署截圖"
+              style="max-width: 580px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 設定說明、執行身分（我）、誰可以存取（所有人），點擊右下角「部署」</p>
+          </div>
+        </li>
+        <li>部署完成後，在「網頁應用程式」區塊點擊 <strong>「複製」</strong> 網址（網址結尾為 <code>/exec</code>）。
+          <div style="margin: 14px 0; text-align: center;">
+            <img src="images/複製網址.png" alt="複製網頁應用程式網址截圖"
+              style="max-width: 540px; width: 100%; height: auto; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,0.1); border: 1px solid var(--border);">
+            <p style="margin-top: 6px; font-size: 0.85rem; color: var(--text-muted);">▲ 點擊網頁應用程式網址下方的「複製」，取得專屬小助理連結</p>
+          </div>
+        </li>
+      </ol>
+      <div class="alert alert-success">
+        <div>🚀 <strong>大功告成！</strong> 這串網址就是您專屬的「AI 智慧生活管家」網站！</div>
+      </div>
+    </div>
+
+    <!-- 步驟 6 -->
+    <div class="step-card">
+      <div class="step-header">
+        <span class="step-badge">步驟 6</span>
+        <h2 class="step-title">加入手機主畫面（秒變專屬原生 App）</h2>
+      </div>
+      <p>將網址傳至手機打開，免去每次都要輸入網址的麻煩：</p>
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 14px;">
+        <div style="background: #F1F5F9; padding: 18px; border-radius: 12px;">
+          <h4 style="margin-bottom: 8px;">🍎 iPhone 使用者 (Safari)</h4>
+          <ol style="margin-bottom: 0;">
+            <li>用 Safari 開啟該網址。</li>
+            <li>點擊螢幕下方中央的 <strong>「分享」按鈕</strong>（向上箭頭）。</li>
+            <li>滑動選單點選 <strong>「加入主畫面」</strong>。</li>
+            <li>輸入名稱「AI小助理」➜ 點擊「新增」。</li>
+          </ol>
+        </div>
+        <div style="background: #F1F5F9; padding: 18px; border-radius: 12px;">
+          <h4 style="margin-bottom: 8px;">🤖 Android 使用者 (Chrome)</h4>
+          <ol style="margin-bottom: 0;">
+            <li>用 Chrome 開啟該網址。</li>
+            <li>點擊右上角 <strong>「三個點」選單</strong>。</li>
+            <li>點選 <strong>「安裝應用程式」</strong> 或 <strong>「新增至主螢幕」</strong>。</li>
+            <li>點擊「新增」。</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="step-card">
+      <h3 style="margin-bottom: 18px; font-size: 1.3rem;">❓ 常見問題（FAQ）</h3>
+
+      <div class="faq-item">
+        <div class="faq-q">Q1：拍了名片之後，手機通訊錄真的會出現嗎？</div>
+        <div class="faq-a">是的！只要您手機登入的是同一個 Google 帳號，名片上的姓名、電話、單位與職稱就會在 3 秒內自動同步到您手機的 Google 聯絡人中，完全不用手動輸入。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Q2：為什麼點擊網頁表格裡的「🗓️ 已同步Google日曆」會開啟日曆？</div>
+        <div class="faq-a">系統提供智慧直達功能，點擊該徽章會直接在新分頁開啟 Google 日曆，並自動跳轉定位到該行程的當天視圖，方便您立刻核對。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Q3：未來如果想要修改或升級程式，網址會變嗎？</div>
+        <div class="faq-a">不會！只要在 Apps Script 點「部署 > 管理部署作業 > 編輯 > 版本選擇新版本 > 部署」，網址永遠維持不變，手機桌面上的 App 也能自動獲取最新功能。</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">Q4：我的資料放在哪裡？安全嗎？</div>
+        <div class="faq-a">100% 安全！所有的資料只存放在您自己的 Google 雲端試算表與日曆中，沒有經過任何第三方廠商伺服器，永久擁有最高的隱私權與所有權。</div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2026 AI 智慧生活管家・由 Google Gemini & Apps Script 提供技術驅動</p>
+    </footer>
+
+  </div>
+
+</body>
+
+</html>
